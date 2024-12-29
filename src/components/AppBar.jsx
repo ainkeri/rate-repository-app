@@ -1,4 +1,4 @@
-import { View, StyleSheet, Pressable } from 'react-native'
+import { View, StyleSheet, Pressable, ScrollView } from 'react-native'
 import Constants from 'expo-constants'
 import AppBarTab from './AppBarTab'
 import theme from '../theme'
@@ -17,10 +17,12 @@ const onPressFunction = () => {
 
 const AppBar = () => {
     return <View style={styles.container}>
-        <Pressable onPress={onPressFunction}>
-            <AppBarTab />
-        </Pressable>
-    </View>
+        <ScrollView horizontal={true}>
+            <Pressable onPress={onPressFunction}>
+                <AppBarTab />
+            </Pressable>
+        </ScrollView>
+    </View >
 }
 
 export default AppBar

@@ -17,14 +17,17 @@ const styles = StyleSheet.create({
 
 
 const AppBarTab = () => {
-    return <View style={styles.flexContainer}>
-        <Link to="/">
-            <Text style={styles.text}>Repositories</Text>
-        </Link>
-        <Link to="/signin">
-            <Text style={styles.text}>Sign in</Text>
-        </Link>
-    </View>
-}
+    return (
+        <View style={styles.flexContainer}>
+            <Link to="/">
+                <Text style={styles.text}>Repositories</Text>
+            </Link>
+            <Link to="/signin">
+                <Text style={styles.text}>Sign in</Text>
+            </Link>
+        </View>
+    );
+};
+
 
 export default AppBarTab
