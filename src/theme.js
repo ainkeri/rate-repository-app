@@ -13,7 +13,10 @@ const theme = {
     signInInput: 18
   },
   fonts: {
-    main: 'System',
+    default: 'System',
+    main: 'Sans-serif',
+    android: 'Roboto',
+    ios: 'Arial'
   },
   fontWeights: {
     normal: '400',
