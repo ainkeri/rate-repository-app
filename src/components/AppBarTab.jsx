@@ -1,11 +1,11 @@
 import { View, StyleSheet } from 'react-native'
 import Text from "./Text"
 import theme from '../theme'
+import { Link } from 'react-router-native'
 
 const styles = StyleSheet.create({
     flexContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
     },
     text: {
         color: theme.colors.appBarTabPrimary,
@@ -18,7 +18,12 @@ const styles = StyleSheet.create({
 
 const AppBarTab = () => {
     return <View style={styles.flexContainer}>
-        <Text style={styles.text}>Repositories</Text>
+        <Link to="/">
+            <Text style={styles.text}>Repositories</Text>
+        </Link>
+        <Link to="/signin">
+            <Text style={styles.text}>Sign in</Text>
+        </Link>
     </View>
 }
 
