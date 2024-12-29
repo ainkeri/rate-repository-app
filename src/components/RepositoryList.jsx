@@ -4,6 +4,9 @@ import RepositoryItem from "./RepositoryItem";
 const styles = StyleSheet.create({
   separator: {
     height: 10,
+    backgroundColor: "#e1e4e8",
+    marginBottom: 15,
+    marginTop: 15
   },
 });
 
@@ -70,6 +73,7 @@ const RepositoryList = () => {
           stargazersCount={item.stargazersCount}
           ratingAverage={item.ratingAverage}
           reviewCount={item.reviewCount}
+          ownerAvatarUrl={item.ownerAvatarUrl}
         />
       )}
       keyExtractor={(item) => item.id}

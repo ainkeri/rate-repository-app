@@ -4,7 +4,8 @@ const theme = {
     textSecondary: '#586069',
     primary: '#0366d6',
     appBarPrimary: "#24292e",
-    appBarTabPrimary: "white"
+    appBarTabPrimary: "#ffffff",
+    languageTagPrimary: "#ffffff"
   },
   fontSizes: {
     body: 14,
@@ -17,6 +18,14 @@ const theme = {
     normal: '400',
     bold: '700',
   },
+  margins: {
+    top: 10,
+    bottom: 10,
+    left: 15
+  },
+  breaks: {
+    breakWord: "breakWord"
+  }
 };
 
 export default theme;
