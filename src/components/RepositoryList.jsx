@@ -14,9 +14,17 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = () => {
-  const { repositories } = useRepositories()
+  const { data, loading, error } = useRepositories()
 
-  const repositoryNodes = repositories ? repositories.edges.map(edge => edge.node) : [];
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>
+  }
+
+  const repositoryNodes = data.repositories ? data.repositories.edges.map(edge => edge.node) : [];
 
   return (
     <FlatList
