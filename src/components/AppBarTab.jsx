@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import Text from "./Text"
 import theme from '../theme'
 import { Link, useNavigate } from 'react-router-native'
@@ -34,7 +34,9 @@ const AppBarTab = () => {
     const isUserLoggedIn = () => {
         if (data.me) {
             return <Link to="/signout">
-                <Text style={styles.text} onClick={onClick}>Sign out</Text>
+                <TouchableOpacity onPress={onPress}>
+                    <Text style={styles.text}>Sign out</Text>
+                </TouchableOpacity>
             </Link>
         } else if (!data.me) {
             return <Link to="/signin">
@@ -43,7 +45,7 @@ const AppBarTab = () => {
         }
     }
 
-    const onClick = async () => {
+    const onPress = async () => {
         try {
             await signOut()
             navigate(-1)
