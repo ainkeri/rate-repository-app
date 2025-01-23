@@ -1,7 +1,9 @@
 import { View, StyleSheet } from 'react-native'
 import Text from "./Text"
 import theme from '../theme'
-import { Link } from 'react-router-native'
+import { Link, useNavigate } from 'react-router-native'
+import useMe from "../hooks/useMe";
+import useSignOut from '../hooks/useSignOut';
 
 const styles = StyleSheet.create({
     flexContainer: {
@@ -17,14 +19,45 @@ const styles = StyleSheet.create({
 
 
 const AppBarTab = () => {
+    const { data, loading, error } = useMe()
+    const [signOut] = useSignOut()
+    let navigate = useNavigate()
+
+    if (loading) {
+        return <Text>Loading...</Text>
+    }
+
+    if (error) {
+        return <Text>Error</Text>
+    }
+
+    const isUserLoggedIn = () => {
+        if (data.me) {
+            return <Link to="/signout">
+                <Text style={styles.text} onClick={onClick}>Sign out</Text>
+            </Link>
+        } else if (!data.me) {
+            return <Link to="/signin">
+                <Text style={styles.text}>Sign in</Text>
+            </Link>
+        }
+    }
+
+    const onClick = async () => {
+        try {
+            await signOut()
+            navigate(-1)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     return (
         <View style={styles.flexContainer}>
             <Link to="/">
                 <Text style={styles.text}>Repositories</Text>
             </Link>
-            <Link to="/signin">
-                <Text style={styles.text}>Sign in</Text>
-            </Link>
+            {isUserLoggedIn()}
         </View>
     );
 };
