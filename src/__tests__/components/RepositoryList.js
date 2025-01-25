@@ -53,8 +53,6 @@ describe('RepositoryList', () => {
             const repositoryItems = screen.getAllByTestId('repositoryItem');
             const [firstRepositoryItem, secondRepositoryItem] = repositoryItems;
 
-            screen.debug();
-
             expect(within(firstRepositoryItem).getByText("jaredpalmer/formik")).toHaveTextContent("jaredpalmer/formik");
             expect(within(firstRepositoryItem).getByText("Build forms in React, without the tears")).toHaveTextContent("Build forms in React, without the tears");
             expect(within(firstRepositoryItem).getByText("TypeScript")).toHaveTextContent("TypeScript");
