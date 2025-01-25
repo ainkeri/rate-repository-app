@@ -10,7 +10,8 @@ const theme = {
   fontSizes: {
     body: 14,
     subheading: 16,
-    signInInput: 18
+    signInInput: 18,
+    gitHub: 16,
   },
   fonts: {
     default: 'System',
