@@ -1,16 +1,16 @@
 import { useQuery } from "@apollo/client";
-import { GET_REPOSITORY } from "../graphql/queries";
+import { GET_REVIEWS } from "../graphql/queries";
 import { useParams } from "react-router-native";
 
-const useRepository = () => {
+const useReviews = () => {
     let { userId } = useParams();
 
-    const data = useQuery(GET_REPOSITORY, {
+    const { data, loading, error } = useQuery(GET_REVIEWS, {
         variables: { repositoryId: userId },
         skip: !userId,
     });
 
-    return data;
+    return { data, loading, error };
 };
 
-export default useRepository;
+export default useReviews;

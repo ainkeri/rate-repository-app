@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   repositoryNameInfo: {
-    fontWeight: theme.fonts.bold,
+    fontWeight: theme.fontWeights.bold,
     marginTop: 5,
     marginBottom: 5
   },

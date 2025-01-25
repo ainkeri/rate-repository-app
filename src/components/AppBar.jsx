@@ -11,14 +11,10 @@ const styles = StyleSheet.create({
     },
 })
 
-const onPressFunction = () => {
-    console.log("Pressed")
-}
-
 const AppBar = () => {
     return <View style={styles.container}>
         <ScrollView horizontal={true}>
-            <Pressable onPress={onPressFunction}>
+            <Pressable>
                 <AppBarTab />
             </Pressable>
         </ScrollView>
