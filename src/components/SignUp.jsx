@@ -1,11 +1,11 @@
 import * as yup from "yup";
 
 import Text from "./Text";
-import { TextInput, View, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import { useFormik } from "formik";
 
 import theme from "../theme";
-import useSignIn from "../hooks/useSignIn";
+import useCreateUser from "../hooks/useCreateUser";
 import { useNavigate } from "react-router-native";
 
 const styles = StyleSheet.create({
@@ -63,20 +63,27 @@ const styles = StyleSheet.create({
 const initialValues = {
   username: "",
   password: "",
+  passwordConfirm: "",
 };
 
 const validationSchema = yup.object().shape({
   username: yup
     .string()
-    .min(3, "Username length must be greater or equal to 3")
+    .min(5, "Username length must be greater or equal to 5")
+    .max(30, "Username length must be less or equal to 30")
     .required("Username is required"),
   password: yup
     .string()
     .min(5, "Password length must be greater or equal to 5")
+    .max(50, "Password length must be less or equal to 50")
     .required("Password is required"),
+  passwordConfirm: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords do not match")
+    .required("Password confirmation is required"),
 });
 
-export const SignInForm = ({ onSubmit }) => {
+export const SignUpForm = ({ onSubmit }) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -105,36 +112,52 @@ export const SignInForm = ({ onSubmit }) => {
           formik.touched.password &&
             formik.errors.password && { borderColor: "#d73a4a" },
         ]}
+        marginTop="10"
         placeholder="Password"
-        value={formik.values.password}
         secureTextEntry={true}
+        value={formik.values.password}
         onChangeText={formik.handleChange("password")}
       />
       {formik.touched.password && formik.errors.password && (
         <Text style={styles.errorText}>{formik.errors.password}</Text>
       )}
+      <TextInput
+        style={[
+          styles.inputContainer,
+          formik.touched.passwordConfirm &&
+            formik.errors.passwordConfirm && { borderColor: "#d73a4a" },
+        ]}
+        marginTop="10"
+        placeholder="Password confirmation"
+        secureTextEntry={true}
+        value={formik.values.passwordConfirm}
+        onChangeText={formik.handleChange("passwordConfirm")}
+      />
+      {formik.touched.passwordConfirm && formik.errors.passwordConfirm && (
+        <Text style={styles.errorText}>{formik.errors.passwordConfirm}</Text>
+      )}
       <TouchableOpacity style={styles.button} onPress={formik.handleSubmit}>
-        <Text style={styles.buttonText}>Sign in</Text>
+        <Text style={styles.buttonText}>Sign up</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-const SignIn = () => {
-  const [signIn] = useSignIn();
+const SignUp = () => {
+  const [createUser] = useCreateUser();
   let navigate = useNavigate();
 
   const onSubmit = async (values) => {
     const { username, password } = values;
     try {
-      await signIn({ username, password });
-      navigate("/");
+      await createUser({ username, password });
+      navigate("/signin");
     } catch (e) {
       console.log(e);
     }
   };
 
-  return <SignInForm onSubmit={onSubmit} />;
+  return <SignUpForm onSubmit={onSubmit} />;
 };
 
-export default SignIn;
+export default SignUp;

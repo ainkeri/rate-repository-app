@@ -33,17 +33,28 @@ const AppBarTab = () => {
   const isUserLoggedIn = () => {
     if (data.me) {
       return (
-        <Link to="/signout">
-          <TouchableOpacity onPress={onPress}>
-            <Text style={styles.text}>Sign out</Text>
-          </TouchableOpacity>
-        </Link>
+        <View style={styles.flexContainer}>
+          {" "}
+          <Link to="/createreview">
+            <Text style={styles.text}>Create a review</Text>
+          </Link>
+          <Link to="/signout">
+            <TouchableOpacity onPress={onPress}>
+              <Text style={styles.text}>Sign out</Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
       );
     } else if (!data.me) {
       return (
-        <Link to="/signin">
-          <Text style={styles.text}>Sign in</Text>
-        </Link>
+        <View style={styles.flexContainer}>
+          <Link to="/signin">
+            <Text style={styles.text}>Sign in</Text>
+          </Link>
+          <Link to="/signup">
+            <Text style={styles.text}>Sign up</Text>
+          </Link>
+        </View>
       );
     }
   };
@@ -61,9 +72,6 @@ const AppBarTab = () => {
     <View style={styles.flexContainer}>
       <Link to="/">
         <Text style={styles.text}>Repositories</Text>
-      </Link>
-      <Link to="/createreview">
-        <Text style={styles.text}>Create a review</Text>
       </Link>
       {isUserLoggedIn()}
     </View>
