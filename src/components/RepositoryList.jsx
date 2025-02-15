@@ -2,9 +2,10 @@ import { FlatList, View, Text, StyleSheet, Pressable } from "react-native";
 import RepositoryItem from "./RepositoryItem";
 import useRepositories from "../hooks/useRepositories";
 import { useNavigate } from "react-router-native";
-import { useState } from "react";
-import { Button, Menu, PaperProvider } from "react-native-paper";
+import { useState, useRef } from "react";
+import { Button, Menu, PaperProvider, Searchbar } from "react-native-paper";
 import theme from "../theme";
+import { useDebounce } from "use-debounce";
 
 const styles = StyleSheet.create({
   separator: {
@@ -21,6 +22,12 @@ const styles = StyleSheet.create({
   menuText: {
     color: theme.colors.textSecondary,
   },
+  searchBar: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 5,
+    marginRight: 5,
+  },
 });
 
 const ItemSeparator = () => <View style={styles.separator} />;
@@ -29,8 +36,11 @@ export const RepositoryListContainer = ({
   repositories,
   onChange,
   menuItem,
+  onSearchInput,
+  searchKeyword,
 }) => {
   const [visible, setVisible] = useState(false);
+  const searchRef = useRef(null);
 
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
@@ -66,47 +76,56 @@ export const RepositoryListContainer = ({
         )}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
-          <View style={styles.menuBar}>
-            <Menu
-              visible={visible}
-              onDismiss={closeMenu}
-              anchor={
-                <Button onPress={openMenu}>
-                  <Text style={styles.menuText}>{menuItem}</Text>
-                </Button>
-              }
-            >
-              <Menu.Item
-                onPress={() => {
-                  onChange("Latest repositories", "CREATED_AT", "DESC");
-                  closeMenu();
-                }}
-                title="Latest repositories"
-              />
-              <Menu.Item
-                onPress={() => {
-                  onChange(
-                    "Highest rated repositories",
-                    "RATING_AVERAGE",
-                    "DESC"
-                  );
-                  closeMenu();
-                }}
-                title="Highest rated repositories"
-              />
-              <Menu.Item
-                onPress={() => {
-                  onChange(
-                    "Lowest rated repositories",
-                    "RATING_AVERAGE",
-                    "ASC"
-                  );
-                  closeMenu();
-                }}
-                title="Lowest rated repositories"
-              />
-            </Menu>
-          </View>
+          <>
+            <Searchbar
+              ref={searchRef}
+              style={styles.searchBar}
+              placeholder="Search"
+              onChangeText={onSearchInput}
+              value={searchKeyword}
+            />
+            <View style={styles.menuBar}>
+              <Menu
+                visible={visible}
+                onDismiss={closeMenu}
+                anchor={
+                  <Button onPress={openMenu}>
+                    <Text style={styles.menuText}>{menuItem}</Text>
+                  </Button>
+                }
+              >
+                <Menu.Item
+                  onPress={() => {
+                    onChange("Latest repositories", "CREATED_AT", "DESC");
+                    closeMenu();
+                  }}
+                  title="Latest repositories"
+                />
+                <Menu.Item
+                  onPress={() => {
+                    onChange(
+                      "Highest rated repositories",
+                      "RATING_AVERAGE",
+                      "DESC"
+                    );
+                    closeMenu();
+                  }}
+                  title="Highest rated repositories"
+                />
+                <Menu.Item
+                  onPress={() => {
+                    onChange(
+                      "Lowest rated repositories",
+                      "RATING_AVERAGE",
+                      "ASC"
+                    );
+                    closeMenu();
+                  }}
+                  title="Lowest rated repositories"
+                />
+              </Menu>
+            </View>
+          </>
         }
       />
     </PaperProvider>
@@ -117,7 +136,15 @@ const RepositoryList = () => {
   const [orderBy, setOrderBy] = useState("CREATED_AT");
   const [orderDirection, setOrderDirection] = useState("DESC");
   const [menuItem, setMenuItem] = useState("Latest repositories");
-  const { data, loading, error } = useRepositories(orderBy, orderDirection);
+  const [searchKeyword, setSearchKeyword] = useState("");
+
+  const [debouncedSearchKeyword] = useDebounce(searchKeyword, 500);
+
+  const { data, loading, error } = useRepositories(
+    orderBy,
+    orderDirection,
+    debouncedSearchKeyword
+  );
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -133,11 +160,17 @@ const RepositoryList = () => {
     setOrderDirection(orderDirection);
   };
 
+  const onSearchInput = (searchKeyword) => {
+    setSearchKeyword(searchKeyword);
+  };
+
   return (
     <RepositoryListContainer
       repositories={data.repositories}
       onChange={onChange}
       menuItem={menuItem}
+      onSearchInput={onSearchInput}
+      searchKeyword={searchKeyword}
     />
   );
 };
